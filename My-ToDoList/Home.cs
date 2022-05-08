@@ -13,6 +13,10 @@ namespace My_ToDoList
 {
     public partial class Home : Form
     {
+
+        List<Tareas> tareas = new List<Tareas>();
+
+
         public Home()
         {
             InitializeComponent();
@@ -28,8 +32,13 @@ namespace My_ToDoList
             lblDate.Text = DateTime.Now.ToLongDateString().ToLower();
 
             //Load Task's
-            List<Tareas> tareas = new List<Tareas>();
-            var reader = new StreamReader(File.OpenRead(@"C:\Users\igles\source\repos\My-ToDoList\My-ToDoList\Base de Datos\Tareas.csv"), System.Text.Encoding.UTF8);
+            LoadTasks();
+
+        }
+
+        public void LoadTasks()
+        {
+            var reader = new StreamReader(File.OpenRead(@"C:\Users\igles\OneDrive\Escritorio\tareas.csv"), System.Text.Encoding.UTF8);
             while (!reader.EndOfStream)
             {
                 var linea = reader.ReadLine();
@@ -59,6 +68,7 @@ namespace My_ToDoList
                     }
                 }
             }
+
             ListMyDay.Items.Clear();
             //Load List Tasks
             foreach (var item in tareas)
@@ -81,9 +91,67 @@ namespace My_ToDoList
                         Console.WriteLine();
                         break;
                 }
-                
+
             }
-            //ListTasks.Items.Add("Añadido");
+            reader.Close();
+        }
+
+        private void btnNuevaTarea_Click(object sender, EventArgs e)
+        {
+            panelNuevaTarea.Visible = true;
+        }
+
+        private void btnSave_Click(object sender, EventArgs e)
+        {
+            string ruta = @"C:\Users\igles\OneDrive\Escritorio\tareas.csv";
+            string separador = "|";
+
+            StringBuilder salida = new StringBuilder();
+            salida.AppendLine(string.Join(separador, "Id|Seccion|Tarea|Status"));
+            for (int i = 0; i < tareas.Count; i++)
+            {
+                string cadena = $"{tareas[i].Id}|{tareas[i].Seccion}|{tareas[i].Tarea}|{tareas[i].Status}";
+                salida.AppendLine(string.Join(separador, cadena));
+            }
+            salida.AppendLine(string.Join(separador, $"{tareas.Count + 1}|{cmbLists.Text}|{txtTask.Text}|Active"));
+            File.Delete(ruta);
+            File.AppendAllText(ruta, salida.ToString());
+
+            Tareas newTask = new Tareas()
+            {
+                Id = tareas.Count + 1,
+                Seccion = cmbLists.Text,
+                Tarea = txtTask.Text,
+                Status = "Active"
+            };
+            tareas.Add(newTask);
+
+            switch (cmbLists.Text)
+            {
+                case "MyDay":
+                    ListMyDay.Items.Add(txtTask.Text);
+                    break;
+                case "Important":
+                    break;
+                case "Planned":
+                    break;
+                case "ForMe":
+                    break;
+                case "Tasks":
+                    //ListTasks.Items.Add(item.Tarea);
+                    break;
+                default:
+                    Console.WriteLine();
+                    break;
+            }
+
+            txtTask.Text = "";
+            cmbLists.SelectedText = "";
+        }
+
+        private void btnHiddePanelNewTask_Click(object sender, EventArgs e)
+        {
+            panelNuevaTarea.Visible = false;
         }
     }
 
