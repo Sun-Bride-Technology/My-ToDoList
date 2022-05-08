@@ -33,7 +33,7 @@ namespace My_ToDoList
             while (!reader.EndOfStream)
             {
                 var linea = reader.ReadLine();
-                var valores = linea.Split(',');
+                var valores = linea.Split('|');
 
                 for (int i = 0; i < valores.Length; i++)
                 {
