@@ -12,18 +12,31 @@ namespace My_ToDoList
 {
     public partial class Login : Form
     {
+        public List<User> lstUser = new List<User>();
+        
+
         public Login()
         {
             InitializeComponent();
         }
-
+        
         private void btnAceptar_Click(object sender, EventArgs e)
         {
             if (txtUsuario.Text != "" && (txtContrasenia.Text != "" && txtContrasenia.Text.Length >= 5) )
             {
-                Home home = new Home();
-                this.Hide();
-                home.Show();
+                bool login = false;
+                foreach (var item in lstUser)
+                {
+                    if (txtUsuario.Text == item.username && txtContrasenia.Text == item.password)
+                    {
+                        login = true;
+                        Home home = new Home();
+                        this.Hide();
+                        home.Show();
+                    }
+                }
+                if (login == false)
+                    MessageBox.Show("Usuario No encontrado");
             }
             else
             {
@@ -35,5 +48,18 @@ namespace My_ToDoList
         {
             Application.Exit();
         }
+
+        private void Login_Load(object sender, EventArgs e)
+        {
+            User user = new User();
+            user.username = "Alfredo01"; user.password = "123456";
+            lstUser.Add(user);
+        }
+    }
+
+    public class User
+    {
+        public string username { get; set; }
+        public string password { get; set; }
     }
 }

@@ -207,51 +207,58 @@ namespace My_ToDoList
         //Botones
         private void btnSave_Click(object sender, EventArgs e)
         {
-            string ruta = @"C:\Users\igles\source\repos\My-ToDoList\My-ToDoList\Base de Datos\Tareas.csv";
-            string separador = "|";
-
-            StringBuilder salida = new StringBuilder();
-            salida.AppendLine(string.Join(separador, "Id|Seccion|Tarea|Status"));
-            for (int i = 0; i < tareas.Count; i++)
+            if(txtTask.Text != "" && cmbLists.Text != "")
             {
-                string cadena = $"{tareas[i].Id}|{tareas[i].Seccion}|{tareas[i].Tarea}|{tareas[i].Status}";
-                salida.AppendLine(string.Join(separador, cadena));
+                string ruta = @"C:\Users\igles\source\repos\My-ToDoList\My-ToDoList\Base de Datos\Tareas.csv";
+                string separador = "|";
+
+                StringBuilder salida = new StringBuilder();
+                salida.AppendLine(string.Join(separador, "Id|Seccion|Tarea|Status"));
+                for (int i = 0; i < tareas.Count; i++)
+                {
+                    string cadena = $"{tareas[i].Id}|{tareas[i].Seccion}|{tareas[i].Tarea}|{tareas[i].Status}";
+                    salida.AppendLine(string.Join(separador, cadena));
+                }
+                salida.AppendLine(string.Join(separador, $"{tareas.Count + 1}|{cmbLists.Text}|{txtTask.Text}|Active"));
+                File.Delete(ruta);
+                File.AppendAllText(ruta, salida.ToString());
+
+                Tareas newTask = new Tareas()
+                {
+                    Id = tareas.Count + 1,
+                    Seccion = cmbLists.Text,
+                    Tarea = txtTask.Text,
+                    Status = "Active"
+                };
+                tareas.Add(newTask);
+
+                switch (cmbLists.Text)
+                {
+                    case "Mi Día":
+                        ListMyDay.Items.Add(txtTask.Text);
+                        break;
+                    case "Importante":
+                        ListImportant.Items.Add(txtTask.Text);
+                        break;
+                    case "Agenda":
+                        break;
+                    case "Asignadas a mí":
+                        break;
+                    case "Tareas":
+                        //ListTasks.Items.Add(item.Tarea);
+                        break;
+                    default:
+                        Console.WriteLine();
+                        break;
+                }
+
+                txtTask.Text = "";
+                cmbLists.SelectedText = "";
             }
-            salida.AppendLine(string.Join(separador, $"{tareas.Count + 1}|{cmbLists.Text}|{txtTask.Text}|Active"));
-            File.Delete(ruta);
-            File.AppendAllText(ruta, salida.ToString());
-
-            Tareas newTask = new Tareas()
+            else
             {
-                Id = tareas.Count + 1,
-                Seccion = cmbLists.Text,
-                Tarea = txtTask.Text,
-                Status = "Active"
-            };
-            tareas.Add(newTask);
-
-            switch (cmbLists.Text)
-            {
-                case "Mi Día":
-                    ListMyDay.Items.Add(txtTask.Text);
-                    break;
-                case "Importante":
-                    ListImportant.Items.Add(txtTask.Text);
-                    break;
-                case "Agenda":
-                    break;
-                case "Asignadas a mí":
-                    break;
-                case "Tareas":
-                    //ListTasks.Items.Add(item.Tarea);
-                    break;
-                default:
-                    Console.WriteLine();
-                    break;
+                MessageBox.Show("Ambos campos son obligatorios");
             }
-
-            txtTask.Text = "";
-            cmbLists.SelectedText = "";
         }
         private void btnClose_Click(object sender, EventArgs e)
         {
@@ -267,11 +274,14 @@ namespace My_ToDoList
         }
         private void btnImportant_Click(object sender, EventArgs e)
         {
+            label1.Text = "Tareas Importantes";
             ListImportant.Visible = true;
+
             ListMyDay.Visible = false;
         }
         private void btnMyDay_Click(object sender, EventArgs e)
         {
+            label1.Text = "Mi Día";
             ListMyDay.Visible = true;
 
             ListImportant.Visible = false;

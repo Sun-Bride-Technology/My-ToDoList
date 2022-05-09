@@ -31,9 +31,6 @@ namespace My_ToDoList
         {
             this.panelList = new System.Windows.Forms.Panel();
             this.btnLogOut = new System.Windows.Forms.Button();
-            this.btnTasks = new System.Windows.Forms.Button();
-            this.btnForMe = new System.Windows.Forms.Button();
-            this.btnPlanned = new System.Windows.Forms.Button();
             this.btnImportant = new System.Windows.Forms.Button();
             this.btnMyDay = new System.Windows.Forms.Button();
             this.panelInfo = new System.Windows.Forms.Panel();
@@ -70,9 +67,6 @@ namespace My_ToDoList
             // 
             this.panelList.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(34)))), ((int)(((byte)(34)))));
             this.panelList.Controls.Add(this.btnLogOut);
-            this.panelList.Controls.Add(this.btnTasks);
-            this.panelList.Controls.Add(this.btnForMe);
-            this.panelList.Controls.Add(this.btnPlanned);
             this.panelList.Controls.Add(this.btnImportant);
             this.panelList.Controls.Add(this.btnMyDay);
             this.panelList.Controls.Add(this.panelInfo);
@@ -95,51 +89,6 @@ namespace My_ToDoList
             this.btnLogOut.TabIndex = 5;
             this.btnLogOut.Text = "Salir";
             this.btnLogOut.UseVisualStyleBackColor = true;
-            // 
-            // btnTasks
-            // 
-            this.btnTasks.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnTasks.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnTasks.FlatAppearance.BorderSize = 0;
-            this.btnTasks.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnTasks.ForeColor = System.Drawing.Color.White;
-            this.btnTasks.Location = new System.Drawing.Point(0, 236);
-            this.btnTasks.Name = "btnTasks";
-            this.btnTasks.Size = new System.Drawing.Size(150, 34);
-            this.btnTasks.TabIndex = 4;
-            this.btnTasks.Text = "Tareas";
-            this.btnTasks.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnTasks.UseVisualStyleBackColor = true;
-            // 
-            // btnForMe
-            // 
-            this.btnForMe.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnForMe.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnForMe.FlatAppearance.BorderSize = 0;
-            this.btnForMe.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnForMe.ForeColor = System.Drawing.Color.White;
-            this.btnForMe.Location = new System.Drawing.Point(0, 202);
-            this.btnForMe.Name = "btnForMe";
-            this.btnForMe.Size = new System.Drawing.Size(150, 34);
-            this.btnForMe.TabIndex = 3;
-            this.btnForMe.Text = "Asignadas a mí";
-            this.btnForMe.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnForMe.UseVisualStyleBackColor = true;
-            // 
-            // btnPlanned
-            // 
-            this.btnPlanned.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnPlanned.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnPlanned.FlatAppearance.BorderSize = 0;
-            this.btnPlanned.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnPlanned.ForeColor = System.Drawing.Color.White;
-            this.btnPlanned.Location = new System.Drawing.Point(0, 168);
-            this.btnPlanned.Name = "btnPlanned";
-            this.btnPlanned.Size = new System.Drawing.Size(150, 34);
-            this.btnPlanned.TabIndex = 2;
-            this.btnPlanned.Text = "Agenda";
-            this.btnPlanned.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnPlanned.UseVisualStyleBackColor = true;
             // 
             // btnImportant
             // 
@@ -331,10 +280,7 @@ namespace My_ToDoList
             this.cmbLists.FormattingEnabled = true;
             this.cmbLists.Items.AddRange(new object[] {
             "Mi Día",
-            "Importante",
-            "Agenda",
-            "Asignadas a mí",
-            "Tareas"});
+            "Importante"});
             this.cmbLists.Location = new System.Drawing.Point(18, 301);
             this.cmbLists.Name = "cmbLists";
             this.cmbLists.Size = new System.Drawing.Size(149, 29);
@@ -399,6 +345,7 @@ namespace My_ToDoList
             this.ListImportant.Name = "ListImportant";
             this.ListImportant.Size = new System.Drawing.Size(438, 456);
             this.ListImportant.TabIndex = 3;
+            this.ListImportant.Visible = false;
             this.ListImportant.SelectedIndexChanged += new System.EventHandler(this.ListImportant_SelectedIndexChanged);
             // 
             // ListMyDay
@@ -434,9 +381,8 @@ namespace My_ToDoList
             this.label1.ForeColor = System.Drawing.Color.White;
             this.label1.Location = new System.Drawing.Point(12, 12);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(74, 30);
+            this.label1.Size = new System.Drawing.Size(0, 30);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Mi Día";
             // 
             // btnNuevaTarea
             // 
@@ -493,9 +439,6 @@ namespace My_ToDoList
         private System.Windows.Forms.Button btnMinimize;
         private System.Windows.Forms.Button btnClose;
         private System.Windows.Forms.Panel panelBody;
-        private System.Windows.Forms.Button btnTasks;
-        private System.Windows.Forms.Button btnForMe;
-        private System.Windows.Forms.Button btnPlanned;
         private System.Windows.Forms.Button btnImportant;
         private System.Windows.Forms.Button btnMyDay;
         private System.Windows.Forms.Panel panelMyDay;
