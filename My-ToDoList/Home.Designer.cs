@@ -329,10 +329,9 @@ namespace My_ToDoList
             this.cmbLists.Items.AddRange(new object[] {
             "Mi Día",
             "Importante",
-            "Planeado",
-            "Asignadas a mi",
-            "Tareas",
-            "MyDay"});
+            "Agenda",
+            "Asignadas a mí",
+            "Tareas"});
             this.cmbLists.Location = new System.Drawing.Point(18, 301);
             this.cmbLists.Name = "cmbLists";
             this.cmbLists.Size = new System.Drawing.Size(149, 29);
@@ -396,6 +395,7 @@ namespace My_ToDoList
             this.ListMyDay.Name = "ListMyDay";
             this.ListMyDay.Size = new System.Drawing.Size(438, 456);
             this.ListMyDay.TabIndex = 2;
+            this.ListMyDay.SelectedIndexChanged += new System.EventHandler(this.ListMyDay_SelectedIndexChanged);
             // 
             // lblDate
             // 

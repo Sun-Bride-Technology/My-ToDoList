@@ -89,16 +89,16 @@ namespace My_ToDoList
             {
                 switch (item.Seccion)
                 {
-                    case "MyDay":
+                    case "Mi Día":
                         ListMyDay.Items.Add(item.Tarea);
                         break;
-                    case "Important":
+                    case "Importante":
                         break;
-                    case "Planned":
+                    case "Agenda":
                         break;
-                    case "ForMe":
+                    case "Asignadas a mí":
                         break;
-                    case "Tasks":
+                    case "Tareas":
                         //ListTasks.Items.Add(item.Tarea);
                         break;
                     default:
@@ -142,16 +142,16 @@ namespace My_ToDoList
 
             switch (cmbLists.Text)
             {
-                case "MyDay":
+                case "Mi Día":
                     ListMyDay.Items.Add(txtTask.Text);
                     break;
-                case "Important":
+                case "Importante":
                     break;
-                case "Planned":
+                case "Agenda":
                     break;
-                case "ForMe":
+                case "Asignadas a mí":
                     break;
-                case "Tasks":
+                case "Tareas":
                     //ListTasks.Items.Add(item.Tarea);
                     break;
                 default:
@@ -166,6 +166,46 @@ namespace My_ToDoList
         private void btnHiddePanelNewTask_Click(object sender, EventArgs e)
         {
             panelNuevaTarea.Visible = false;
+        }
+
+        private void ListMyDay_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            int index = ListMyDay.SelectedIndex;
+
+            if (ListMyDay.SelectedIndex >= 0 && (MessageBox.Show("¿Quieres marcar esta tarea como terminada?", "", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes))
+            {
+                ListMyDay.Items.RemoveAt(index);
+                List<Tareas> tareasCopy = new List<Tareas>();
+                
+                foreach (var item in tareas)
+                {
+                    if (item.Id != index + 1)
+                    {
+                        tareasCopy.Add(item);
+                    }
+                }
+                //tareas = tareasCopy;
+                SaveChanges(tareasCopy);
+                MessageBox.Show("Tarea Completada");
+            }
+        }
+
+        public void SaveChanges(List<Tareas> p_tareas)
+        {
+            string ruta = @"C:\Users\igles\source\repos\My-ToDoList\My-ToDoList\Base de Datos\Tareas.csv";
+            string separador = "|";
+            File.Delete(ruta);
+
+            StringBuilder salida = new StringBuilder();
+            salida.AppendLine(string.Join(separador, "Id|Seccion|Tarea|Status"));
+            for (int i = 0; i < p_tareas.Count; i++)
+            {
+                string cadena = $"{i+1}|{p_tareas[i].Seccion}|{p_tareas[i].Tarea}|{p_tareas[i].Status}";
+                salida.AppendLine(string.Join(separador, cadena));
+            }
+            
+            File.AppendAllText(ruta, salida.ToString());
+            tareas = p_tareas;
         }
     }
 
