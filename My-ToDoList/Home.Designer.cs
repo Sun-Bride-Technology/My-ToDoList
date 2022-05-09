@@ -52,6 +52,7 @@ namespace My_ToDoList
             this.txtTask = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.panelMyDay = new System.Windows.Forms.Panel();
+            this.ListImportant = new System.Windows.Forms.CheckedListBox();
             this.ListMyDay = new System.Windows.Forms.CheckedListBox();
             this.lblDate = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -154,6 +155,7 @@ namespace My_ToDoList
             this.btnImportant.Text = "Importante";
             this.btnImportant.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnImportant.UseVisualStyleBackColor = true;
+            this.btnImportant.Click += new System.EventHandler(this.btnImportant_Click);
             // 
             // btnMyDay
             // 
@@ -169,6 +171,7 @@ namespace My_ToDoList
             this.btnMyDay.Text = "Mi Día";
             this.btnMyDay.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnMyDay.UseVisualStyleBackColor = true;
+            this.btnMyDay.Click += new System.EventHandler(this.btnMyDay_Click);
             // 
             // panelInfo
             // 
@@ -374,6 +377,7 @@ namespace My_ToDoList
             // 
             // panelMyDay
             // 
+            this.panelMyDay.Controls.Add(this.ListImportant);
             this.panelMyDay.Controls.Add(this.ListMyDay);
             this.panelMyDay.Controls.Add(this.lblDate);
             this.panelMyDay.Controls.Add(this.label1);
@@ -381,6 +385,21 @@ namespace My_ToDoList
             this.panelMyDay.Name = "panelMyDay";
             this.panelMyDay.Size = new System.Drawing.Size(469, 556);
             this.panelMyDay.TabIndex = 1;
+            // 
+            // ListImportant
+            // 
+            this.ListImportant.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(28)))), ((int)(((byte)(28)))), ((int)(((byte)(28)))));
+            this.ListImportant.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.ListImportant.Font = new System.Drawing.Font("Segoe UI", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.ListImportant.ForeColor = System.Drawing.Color.White;
+            this.ListImportant.FormattingEnabled = true;
+            this.ListImportant.Items.AddRange(new object[] {
+            "Item1"});
+            this.ListImportant.Location = new System.Drawing.Point(0, 86);
+            this.ListImportant.Name = "ListImportant";
+            this.ListImportant.Size = new System.Drawing.Size(438, 456);
+            this.ListImportant.TabIndex = 3;
+            this.ListImportant.SelectedIndexChanged += new System.EventHandler(this.ListImportant_SelectedIndexChanged);
             // 
             // ListMyDay
             // 
@@ -395,6 +414,7 @@ namespace My_ToDoList
             this.ListMyDay.Name = "ListMyDay";
             this.ListMyDay.Size = new System.Drawing.Size(438, 456);
             this.ListMyDay.TabIndex = 2;
+            this.ListMyDay.Visible = false;
             this.ListMyDay.SelectedIndexChanged += new System.EventHandler(this.ListMyDay_SelectedIndexChanged);
             // 
             // lblDate
@@ -493,5 +513,6 @@ namespace My_ToDoList
         private System.Windows.Forms.ComboBox cmbLists;
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.Button btnHiddePanelNewTask;
+        private System.Windows.Forms.CheckedListBox ListImportant;
     }
 }

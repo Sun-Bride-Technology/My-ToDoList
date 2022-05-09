@@ -22,11 +22,6 @@ namespace My_ToDoList
             InitializeComponent();
         }
 
-        private void btnClose_Click(object sender, EventArgs e)
-        {
-            Application.Exit();
-        }
-
         private void Home_Load(object sender, EventArgs e)
         {
             lblDate.Text = DateTime.Now.ToLongDateString().ToLower();
@@ -36,6 +31,55 @@ namespace My_ToDoList
 
         }
 
+
+        //Tareas
+        private void ListMyDay_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            int index = ListMyDay.SelectedIndex;
+
+            if (ListMyDay.SelectedIndex >= 0 && (MessageBox.Show("¿Quieres marcar esta tarea como terminada?", "", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes))
+            {
+                var filter = FilterCategory("Mi Día");
+                int i = 0;
+
+                foreach (var item in filter)
+                {
+                    if (i == index)
+                    {
+                        SaveChanges(item.Id);
+                        ListMyDay.Items.RemoveAt(index);
+                    }
+                    i++;
+                }
+                MessageBox.Show("Tarea Completada");
+            }
+        }
+        private void ListImportant_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            int index = ListImportant.SelectedIndex;
+
+            if (ListImportant.SelectedIndex >= 0 && (MessageBox.Show("¿Quieres marcar esta tarea como terminada?", "", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes))
+            {
+                
+                
+
+                var filter = FilterCategory("Importante");
+                int i = 0;
+                foreach (var item in filter)
+                {
+                    if (i == index)
+                    {
+                        SaveChanges(item.Id);
+                        ListImportant.Items.RemoveAt(index);
+                    }
+                    i++;
+                }
+                MessageBox.Show("Tarea Completada");
+            }
+        }
+
+        
+        //Funciones
         public void LoadTasks()
         {
             StreamReader reader;
@@ -44,12 +88,12 @@ namespace My_ToDoList
                 reader = new StreamReader(File.OpenRead(@"C:\Users\igles\source\repos\My-ToDoList\My-ToDoList\Base de Datos\Tareas.csv"), System.Text.Encoding.UTF8);
             }
             else
-            {                
+            {
                 StringBuilder salida = new StringBuilder();
                 salida.AppendLine(string.Join("|", "Id|Seccion|Tarea|Status"));
                 File.AppendAllText(@"C:\Users\igles\source\repos\My-ToDoList\My-ToDoList\Base de Datos\Tareas.csv", salida.ToString());
-                
-                
+
+
                 reader = new StreamReader(File.OpenRead(@"C:\Users\igles\source\repos\My-ToDoList\My-ToDoList\Base de Datos\Tareas.csv"), System.Text.Encoding.UTF8);
             }
 
@@ -62,7 +106,6 @@ namespace My_ToDoList
                 {
                     if ((i % 4) == 0)
                     {
-                        //MessageBox.Show(valores[i] + " - " + valores[i + 1] + " - " + valores[i + 2] + " - " + valores[i + 3]);
                         if (valores[i + 3] == "Active")
                         {
                             Tareas tarea = new Tareas()
@@ -83,7 +126,7 @@ namespace My_ToDoList
                 }
             }
 
-            ListMyDay.Items.Clear();
+            ClearList();
             //Load List Tasks
             foreach (var item in tareas)
             {
@@ -93,6 +136,7 @@ namespace My_ToDoList
                         ListMyDay.Items.Add(item.Tarea);
                         break;
                     case "Importante":
+                        ListImportant.Items.Add(item.Tarea);
                         break;
                     case "Agenda":
                         break;
@@ -109,12 +153,58 @@ namespace My_ToDoList
             }
             reader.Close();
         }
-
-        private void btnNuevaTarea_Click(object sender, EventArgs e)
+        public void ClearList()
         {
-            panelNuevaTarea.Visible = true;
+            ListMyDay.Items.Clear();
+            ListImportant.Items.Clear();
+        }
+        public List<Tareas> FilterCategory(string Category)
+        {
+            List<Tareas> tareasFiltradas = new List<Tareas>();
+            foreach (var item in tareas)
+            {
+                if (item.Seccion == Category)
+                {
+                    tareasFiltradas.Add(item);
+                }
+            }
+            return tareasFiltradas;
+        }
+        public void SaveChanges(int IdTarea)
+        {
+            string ruta = @"C:\Users\igles\source\repos\My-ToDoList\My-ToDoList\Base de Datos\Tareas.csv";
+            string separador = "|";
+
+            List<Tareas> tareasCopy = new List<Tareas>();
+            File.Delete(ruta);
+
+            StringBuilder salida = new StringBuilder();
+            salida.AppendLine(string.Join(separador, "Id|Seccion|Tarea|Status"));
+            for (int i = 0; i < tareas.Count; i++)
+            {
+                if (tareas[i].Id != IdTarea)
+                {
+                    string cadena = $"{i + 1}|{tareas[i].Seccion}|{tareas[i].Tarea}|{tareas[i].Status}";
+
+                    Tareas tarea = new Tareas()
+                    {
+                        Id = i,
+                        Seccion = tareas[i].Seccion,
+                        Tarea = tareas[i].Tarea,
+                        Status = tareas[i].Status
+                    };
+
+                    tareasCopy.Add(tarea);
+                    salida.AppendLine(string.Join(separador, cadena));
+                }
+            }
+
+            File.AppendAllText(ruta, salida.ToString());
+            tareas = tareasCopy;
         }
 
+
+        //Botones
         private void btnSave_Click(object sender, EventArgs e)
         {
             string ruta = @"C:\Users\igles\source\repos\My-ToDoList\My-ToDoList\Base de Datos\Tareas.csv";
@@ -146,6 +236,7 @@ namespace My_ToDoList
                     ListMyDay.Items.Add(txtTask.Text);
                     break;
                 case "Importante":
+                    ListImportant.Items.Add(txtTask.Text);
                     break;
                 case "Agenda":
                     break;
@@ -162,50 +253,28 @@ namespace My_ToDoList
             txtTask.Text = "";
             cmbLists.SelectedText = "";
         }
-
+        private void btnClose_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+        private void btnNuevaTarea_Click(object sender, EventArgs e)
+        {
+            panelNuevaTarea.Visible = true;
+        }
         private void btnHiddePanelNewTask_Click(object sender, EventArgs e)
         {
             panelNuevaTarea.Visible = false;
         }
-
-        private void ListMyDay_SelectedIndexChanged(object sender, EventArgs e)
+        private void btnImportant_Click(object sender, EventArgs e)
         {
-            int index = ListMyDay.SelectedIndex;
-
-            if (ListMyDay.SelectedIndex >= 0 && (MessageBox.Show("¿Quieres marcar esta tarea como terminada?", "", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes))
-            {
-                ListMyDay.Items.RemoveAt(index);
-                List<Tareas> tareasCopy = new List<Tareas>();
-                
-                foreach (var item in tareas)
-                {
-                    if (item.Id != index + 1)
-                    {
-                        tareasCopy.Add(item);
-                    }
-                }
-                //tareas = tareasCopy;
-                SaveChanges(tareasCopy);
-                MessageBox.Show("Tarea Completada");
-            }
+            ListImportant.Visible = true;
+            ListMyDay.Visible = false;
         }
-
-        public void SaveChanges(List<Tareas> p_tareas)
+        private void btnMyDay_Click(object sender, EventArgs e)
         {
-            string ruta = @"C:\Users\igles\source\repos\My-ToDoList\My-ToDoList\Base de Datos\Tareas.csv";
-            string separador = "|";
-            File.Delete(ruta);
+            ListMyDay.Visible = true;
 
-            StringBuilder salida = new StringBuilder();
-            salida.AppendLine(string.Join(separador, "Id|Seccion|Tarea|Status"));
-            for (int i = 0; i < p_tareas.Count; i++)
-            {
-                string cadena = $"{i+1}|{p_tareas[i].Seccion}|{p_tareas[i].Tarea}|{p_tareas[i].Status}";
-                salida.AppendLine(string.Join(separador, cadena));
-            }
-            
-            File.AppendAllText(ruta, salida.ToString());
-            tareas = p_tareas;
+            ListImportant.Visible = false;
         }
     }
 
