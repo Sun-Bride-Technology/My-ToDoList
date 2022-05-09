@@ -38,7 +38,21 @@ namespace My_ToDoList
 
         public void LoadTasks()
         {
-            var reader = new StreamReader(File.OpenRead(@"C:\Users\igles\OneDrive\Escritorio\tareas.csv"), System.Text.Encoding.UTF8);
+            StreamReader reader;
+            if (File.Exists(@"C:\Users\igles\source\repos\My-ToDoList\My-ToDoList\Base de Datos\Tareas.csv"))
+            {
+                reader = new StreamReader(File.OpenRead(@"C:\Users\igles\source\repos\My-ToDoList\My-ToDoList\Base de Datos\Tareas.csv"), System.Text.Encoding.UTF8);
+            }
+            else
+            {                
+                StringBuilder salida = new StringBuilder();
+                salida.AppendLine(string.Join("|", "Id|Seccion|Tarea|Status"));
+                File.AppendAllText(@"C:\Users\igles\source\repos\My-ToDoList\My-ToDoList\Base de Datos\Tareas.csv", salida.ToString());
+                
+                
+                reader = new StreamReader(File.OpenRead(@"C:\Users\igles\source\repos\My-ToDoList\My-ToDoList\Base de Datos\Tareas.csv"), System.Text.Encoding.UTF8);
+            }
+
             while (!reader.EndOfStream)
             {
                 var linea = reader.ReadLine();
@@ -103,7 +117,7 @@ namespace My_ToDoList
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            string ruta = @"C:\Users\igles\OneDrive\Escritorio\tareas.csv";
+            string ruta = @"C:\Users\igles\source\repos\My-ToDoList\My-ToDoList\Base de Datos\Tareas.csv";
             string separador = "|";
 
             StringBuilder salida = new StringBuilder();
